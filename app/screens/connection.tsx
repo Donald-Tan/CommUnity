@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { useRouter } from "expo-router";
 
 const connectionRequests = [
   {
@@ -37,13 +38,26 @@ const connections = [
 
 export default function ConnectionsScreen() {
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter(); // Initialize router for navigation
 
   const filteredConnections = connections.filter((connection) =>
     connection.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const openChat = (connection) => {
+    router.push({
+      pathname: "/chat",
+      params: {
+        id: connection.id,
+        name: connection.name,
+        image: connection.image, // Passing image too
+      },
+    });
+  };
+
   return (
     <View style={styles.container}>
+      {/* Connection Requests Section */}
       <View style={styles.sectionContainer}>
         <Text style={styles.header}>Request</Text>
         <FlatList
@@ -59,6 +73,8 @@ export default function ConnectionsScreen() {
           )}
         />
       </View>
+
+      {/* Connections Section */}
       <View style={styles.sectionContainer}>
         <Text style={styles.header}>Connections</Text>
         <TextInput
@@ -72,7 +88,10 @@ export default function ConnectionsScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.connectionList}
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.connectionItem}>
+            <TouchableOpacity
+              style={styles.connectionItem}
+              onPress={() => openChat(item)} // Navigate on tap
+            >
               <Image source={item.image} style={styles.profileImage} />
               <View>
                 <Text style={styles.name}>{item.name}</Text>
@@ -86,6 +105,7 @@ export default function ConnectionsScreen() {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -93,7 +113,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   sectionContainer: {
-    marginBottom: 20, // Adjusted marginBottom to control spacing between sections
+    marginBottom: 20,
   },
   header: {
     fontSize: 20,
@@ -121,6 +141,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: "#3A6B73",
   },
   profileImage: {
     width: 50,
