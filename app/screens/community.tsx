@@ -1,10 +1,15 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import Header from '../../components/Headers'
+import ClubList from '../../components/ClubList'
+import MovementList from '../../components/MovementList'
 
 export default function EditCommunityPage() {
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Edit Community Page Here</Text>
+      <Header />
+      <ClubList />
+      <MovementList />
     </View>
   );
 }
