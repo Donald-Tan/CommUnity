@@ -9,16 +9,14 @@ import { SearchBar } from "react-native-screens";
 export default function EditCommunityPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
-
-
   return (
     <View style={styles.container}>
       <ScrollView style={styles.content}>
         <TextInput style={styles.searchBar} placeholder="Find Club or Movement"/>
         <Text style={styles.sectionLabel}>Clubs</Text>
-        <ClubList />
+        <ClubList  showAnnouncements={false}/>
         <Text style={styles.sectionLabel}>Movements</Text>
-        <MovementList />
+        <MovementList showProgressBar={false} />
       </ScrollView>
     </View>
   );

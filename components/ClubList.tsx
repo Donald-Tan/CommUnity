@@ -36,7 +36,7 @@ const fakeClubs = [
     },
 ]
 
-const ClubItem = ({name, members, announcements, image, showJoin}) => {
+const ClubItem = ({name, members, announcements, image, showJoin, showAnnouncements}) => {
     return (
         <View style={styles.container}>
         <View style={styles.imageContainer}>
@@ -46,6 +46,7 @@ const ClubItem = ({name, members, announcements, image, showJoin}) => {
           <Text style={styles.members}>{members} members</Text>
         </View>
       </View>
+      {showAnnouncements && (
       <View style={styles.announcements}>
         {announcements.length > 0 ? (
           announcements.map((announcement, index) => (
@@ -54,7 +55,7 @@ const ClubItem = ({name, members, announcements, image, showJoin}) => {
         ) : (
           <Text style={styles.announcement}>No announcements</Text>
         )}
-      </View>
+      </View>)}
       {showJoin && <TouchableOpacity style={styles.joinButton}>
           <Text style={styles.joinButtonText}>Join</Text>
         </TouchableOpacity>}
@@ -62,7 +63,7 @@ const ClubItem = ({name, members, announcements, image, showJoin}) => {
     );
 }
 
-const ClubList = ({showJoin=true}) => {
+const ClubList = ({showJoin=true, showAnnouncements=true}) => {
     return (
         <View>
             <FlatList 
@@ -73,6 +74,7 @@ const ClubList = ({showJoin=true}) => {
                                 members={item.members} 
                                 announcements={item.announcements} 
                                 showJoin={showJoin}
+                                showAnnouncements={showAnnouncements}
                                 />
                 )}
                 keyExtractor={(item) => item.id}
