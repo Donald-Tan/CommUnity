@@ -11,11 +11,11 @@ export default function EditCommunityPage() {
       <ScrollView style={styles.content}>
         {/* Clubs Section */}
         <Text style={styles.sectionLabel}>Clubs</Text>
-        <ClubList />
+        <ClubList  showJoin={false}/>
 
         {/* Movements Section */}
         <Text style={styles.sectionLabel}>Movements</Text>
-        <MovementList />
+        <MovementList showJoin={false}/>
       </ScrollView>
     </View>
   );

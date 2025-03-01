@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, FlatList, Image} from 'react-native'
+import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from 'react-native'
 
 const fakeClubs = [
     {
@@ -36,7 +36,7 @@ const fakeClubs = [
     },
 ]
 
-const ClubItem = ({name, members, announcements, image}) => {
+const ClubItem = ({name, members, announcements, image, showJoin}) => {
     return (
         <View style={styles.container}>
         <View style={styles.imageContainer}>
@@ -55,11 +55,14 @@ const ClubItem = ({name, members, announcements, image}) => {
           <Text style={styles.announcement}>No announcements</Text>
         )}
       </View>
+      {showJoin && <TouchableOpacity style={styles.joinButton}>
+          <Text style={styles.joinButtonText}>Join</Text>
+        </TouchableOpacity>}
     </View>
     );
 }
 
-const ClubList = () => {
+const ClubList = ({showJoin=true}) => {
     return (
         <View>
             <FlatList 
@@ -68,7 +71,9 @@ const ClubList = () => {
                     <ClubItem   image={item.image} 
                                 name={item.name} 
                                 members={item.members} 
-                                announcements={item.announcements} />
+                                announcements={item.announcements} 
+                                showJoin={showJoin}
+                                />
                 )}
                 keyExtractor={(item) => item.id}
             />
@@ -127,6 +132,19 @@ const styles = StyleSheet.create({
     description: {
       fontSize: 14,
       color: '#fff',
+    },
+    joinButton: {
+      marginTop: 10,
+      backgroundColor: '#2C5D63',
+      paddingVertical: 5,
+      paddingHorizontal: 15,
+      borderRadius: 10,
+      alignSelf: 'flex-start',
+    },
+    joinButtonText: {
+      color: 'white',
+      fontSize: 12,
+      fontWeight: 'bold',
     }
 });
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, FlatList, Image} from 'react-native'
+import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from 'react-native'
 import { Bar } from 'react-native-progress'
 
 const fakeMovements = [
@@ -21,7 +21,7 @@ const fakeMovements = [
     }
 ]
 
-const MovementItem = ({name, members, image, progress}) => {
+const MovementItem = ({name, members, image, progress, showProgressBar, showJoin}) => {
     return (
         <View style={styles.container}>
         <View style={styles.imageContainer}>
@@ -29,14 +29,17 @@ const MovementItem = ({name, members, image, progress}) => {
             <View style={styles.header}>
               <Text style={styles.name}>{name}</Text>
               <Text style={styles.members}>{members} members</Text>
-              <Bar style={styles.bar} progress={progress} color="white" width={100} />
+              {showProgressBar && <Bar style={styles.bar} progress={progress} color="white" width={100} />}
             </View>
         </View>
+        {showJoin &&<TouchableOpacity style={styles.joinButton}>
+          <Text style={styles.joinButtonText}>Join</Text>
+        </TouchableOpacity>}
         </View>
         );
 }   
 
-const MovementList = () => {
+const MovementList = ({showProgressBar = true, showJoin = true}) => {
     return (
         <View>
             <FlatList 
@@ -45,7 +48,10 @@ const MovementList = () => {
                     <MovementItem   image={item.image} 
                                 name={item.name} 
                                 members={item.members} 
-                                progress={item.progress} />
+                                progress={item.progress} 
+                                showProgressBar={showProgressBar}
+                                showJoin={showJoin}
+                                />
                 )}
                 keyExtractor={(item) => item.id}
             />
@@ -104,6 +110,19 @@ const styles = StyleSheet.create({
       description: {
         fontSize: 14,
         color: '#fff',
+      },
+      joinButton: {
+        marginTop: 10,
+        backgroundColor: '#2C5D63',
+        paddingVertical: 5,
+        paddingHorizontal: 15,
+        borderRadius: 10,
+        alignSelf: 'flex-start',
+      },
+      joinButtonText: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: 'bold',
       }
 })
 
