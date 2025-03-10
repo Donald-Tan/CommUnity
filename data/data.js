@@ -1,5 +1,5 @@
 // Hardcoded data for clubs/movements
-export const fakeClubs = [
+export const fakeGroups = [
     {
         image: require('../assets/images/runclub.png'),
         id : '1',
@@ -32,9 +32,25 @@ export const fakeClubs = [
         announcements: [],
         description: "Description for Badminton Club"
     },
+    {
+        id: '5', 
+        image: require('../assets/images/no-smoking.png'), 
+        name: 'No Smoking Movement', 
+        description: 'Description about no smoking', 
+        members: 101,
+        progress: 0.5
+    },
+    {
+        id: '6',
+        image: require('../assets/images/daily-run.png'), 
+        name: 'Daily Running Movement', 
+        description: 'Description about running daily', 
+        members: 24,
+        progress: 0.8
+    }
 ]
 
-export const fakeMovements = [
+/*export const fakeMovements = [
     {
         id: '1', 
         image: require('../assets/images/no-smoking.png'), 
@@ -51,4 +67,4 @@ export const fakeMovements = [
         members: 24,
         progress: 0.8
     }
-]
+]*/

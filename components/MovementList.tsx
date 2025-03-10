@@ -1,26 +1,6 @@
 import React from 'react'
 import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from 'react-native'
 import { Bar } from 'react-native-progress'
-//import {fakeMovements} from '../data/data'
-
-/*const fakeMovements = [
-    {
-        id: '1', 
-        image: require('../assets/images/no-smoking.png'), 
-        name: 'No Smoking Movement', 
-        description: 'Description about no smoking', 
-        members: 101,
-        progress: 0.5
-    },
-    {
-        id: '2',
-        image: require('../assets/images/daily-run.png'), 
-        name: 'Daily Running Movement', 
-        description: 'Description about running daily', 
-        members: 24,
-        progress: 0.8
-    }
-]*/
 
 const MovementItem = ({name, members, image, progress, showProgressBar, showJoin}) => {
     return (

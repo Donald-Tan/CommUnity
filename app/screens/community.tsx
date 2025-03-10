@@ -1,22 +1,17 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Header from '../../components/Headers'
-import ClubList from '../../components/ClubList'
-import MovementList from '../../components/MovementList'
-import { fakeClubs, fakeMovements } from "@/data/data";
+import { fakeGroups } from "@/data/data";
+import GroupList from "@/components/GroupList";
 
 export default function EditCommunityPage() {
   return (
     <View style={styles.container}>
       <Header />
       <ScrollView style={styles.content}>
-        {/* Clubs Section */}
-        <Text style={styles.sectionLabel}>Clubs</Text>
-        <ClubList  clubs={fakeClubs} showJoin={false}/>
-
-        {/* Movements Section */}
-        <Text style={styles.sectionLabel}>Movements</Text>
-        <MovementList movements={fakeMovements} showJoin={false}/>
+        {/* Groups Section */}
+        <Text style={styles.sectionLabel}>Groups</Text>
+        <GroupList  groups={fakeGroups} showJoin={false}/>
       </ScrollView>
     </View>
   );
