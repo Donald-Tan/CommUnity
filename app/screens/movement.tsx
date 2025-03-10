@@ -1,22 +1,59 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
+import {fakeClubs, fakeMovements} from '@/data/data';
 import ClubList from "@/components/ClubList";
 import MovementList from "@/components/MovementList";
 import { SearchBar } from "react-native-screens";
+import {useRouter} from 'expo-router'
 
 
 
 export default function EditCommunityPage() {
   const [searchQuery, setSearchQuery] = useState('');
+  /*const [filteredClubs, setFilteredClubs] = useState<typeof fakeClubs>([]);
+  const [filteredMovements, setFilteredMovements] = useState<typeof fakeMovements>([]);*/
+
+  /*useEffect(() => {
+    const lowerCaseQuery = searchQuery.toLowerCase();
+
+    // Filtering the clubs based on name
+    const filteredClubs = fakeClubs.filter(club => 
+      club.name.toLowerCase().includes(lowerCaseQuery) ||
+      club.description.toLowerCase().includes(lowerCaseQuery)
+    )
+
+    // Filtering the names
+    const filteredMovements = fakeMovements.filter(movement => 
+      movement.name.toLowerCase().includes(lowerCaseQuery) ||
+      movement.description.toLowerCase().includes(lowerCaseQuery)
+    )
+    
+    setFilteredClubs(filteredClubs);
+    setFilteredMovements(filteredMovements);
+
+  }, [setSearchQuery]);*/
+  const filteredClubs = fakeClubs.filter(club => 
+    club.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const filteredMovements = fakeMovements.filter(movement => 
+    movement.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.content}>
-        <TextInput style={styles.searchBar} placeholder="Find Club or Movement"/>
+        <TextInput 
+          style={styles.searchBar} 
+          placeholder="Find Club or Movement"
+          onChangeText={setSearchQuery}
+          value = {searchQuery}
+          />
+
         <Text style={styles.sectionLabel}>Clubs</Text>
-        <ClubList  showAnnouncements={false}/>
+        <ClubList  clubs={filteredClubs} showAnnouncements={false}/>
         <Text style={styles.sectionLabel}>Movements</Text>
-        <MovementList showProgressBar={false} />
+        <MovementList movements={filteredMovements} showProgressBar={false} />
       </ScrollView>
     </View>
   );

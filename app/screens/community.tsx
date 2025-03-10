@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Header from '../../components/Headers'
 import ClubList from '../../components/ClubList'
 import MovementList from '../../components/MovementList'
+import { fakeClubs, fakeMovements } from "@/data/data";
 
 export default function EditCommunityPage() {
   return (
@@ -11,11 +12,11 @@ export default function EditCommunityPage() {
       <ScrollView style={styles.content}>
         {/* Clubs Section */}
         <Text style={styles.sectionLabel}>Clubs</Text>
-        <ClubList  showJoin={false}/>
+        <ClubList  clubs={fakeClubs} showJoin={false}/>
 
         {/* Movements Section */}
         <Text style={styles.sectionLabel}>Movements</Text>
-        <MovementList showJoin={false}/>
+        <MovementList movements={fakeMovements} showJoin={false}/>
       </ScrollView>
     </View>
   );

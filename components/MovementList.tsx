@@ -1,8 +1,9 @@
 import React from 'react'
 import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from 'react-native'
 import { Bar } from 'react-native-progress'
+//import {fakeMovements} from '../data/data'
 
-const fakeMovements = [
+/*const fakeMovements = [
     {
         id: '1', 
         image: require('../assets/images/no-smoking.png'), 
@@ -19,7 +20,7 @@ const fakeMovements = [
         members: 24,
         progress: 0.8
     }
-]
+]*/
 
 const MovementItem = ({name, members, image, progress, showProgressBar, showJoin}) => {
     return (
@@ -39,11 +40,11 @@ const MovementItem = ({name, members, image, progress, showProgressBar, showJoin
         );
 }   
 
-const MovementList = ({showProgressBar = true, showJoin = true}) => {
+const MovementList = ({movements, showProgressBar = true, showJoin = true}) => {
     return (
         <View>
             <FlatList 
-                data={fakeMovements}
+                data={movements}
                 renderItem={({item}) => (
                     <MovementItem   image={item.image} 
                                 name={item.name} 

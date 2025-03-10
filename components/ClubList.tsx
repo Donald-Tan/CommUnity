@@ -1,7 +1,8 @@
 import React from 'react'
 import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from 'react-native'
+//import {fakeClubs} from '../data/data'
 
-const fakeClubs = [
+/*const fakeClubs = [
     {
         image: require('../assets/images/runclub.png'),
         id : '1',
@@ -34,7 +35,7 @@ const fakeClubs = [
         announcements: [],
         description: "Description for Badminton Club"
     },
-]
+]*/
 
 const ClubItem = ({name, members, announcements, image, showJoin, showAnnouncements}) => {
     return (
@@ -63,11 +64,11 @@ const ClubItem = ({name, members, announcements, image, showJoin, showAnnounceme
     );
 }
 
-const ClubList = ({showJoin=true, showAnnouncements=true}) => {
+const ClubList = ({clubs, showJoin=true, showAnnouncements=true}) => {
     return (
         <View>
             <FlatList 
-                data={fakeClubs}
+                data={clubs}
                 renderItem={({item}) => (
                     <ClubItem   image={item.image} 
                                 name={item.name} 
