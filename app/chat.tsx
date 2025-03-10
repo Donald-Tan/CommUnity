@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -10,41 +10,55 @@ import {
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useNavigation } from "expo-router";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 export default function ChatScreen() {
+  type Message = {
+    id: string;
+    text: string;
+    sender: string;
+  };
+
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const socket = io("http://localhost:3000");
-    navigation.setOptions({ tabBarStyle: { display: "none" } });
-
-    return () => {
-      navigation.setOptions({ tabBarStyle: { display: "flex" } });
-    };
-  }, [navigation]);
-
   const router = useRouter();
-  const { id, name, image } = useLocalSearchParams(); // Get connection details
+  const { id, name, image } = useLocalSearchParams();
 
-  const [messages, setMessages] = useState([
-    { id: "1", text: "Hey there!", sender: "them" },
-    { id: "2", text: "How’s it going?", sender: "me" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
+
+  const socket = useRef<Socket | null>(null);
+  useEffect(() => {
+    socket.current = io("http://localhost:3000");
+
+    if (socket.current) {
+      socket.current?.on("chat message", (msg) => {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { id: String(Date.now()), text: msg, sender: "them" },
+        ]);
+      });
+
+      return () => {
+        socket.current?.disconnect();
+      };
+    }
+  }, []);
 
   const sendMessage = () => {
     if (!newMessage.trim()) return;
-    setMessages([
-      ...messages,
-      { id: String(Date.now()), text: newMessage, sender: "me" },
-    ]);
-    setNewMessage(""); // Clear input after sending
+
+    const message = { id: String(Date.now()), text: newMessage, sender: "me" };
+    setMessages((prev) => [...prev, message]);
+
+    if (socket.current) {
+      socket.current.emit("chat message", newMessage);
+    }
+
+    setNewMessage(""); // Clear input
   };
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
@@ -56,7 +70,6 @@ export default function ChatScreen() {
         <Text style={styles.name}>{name}</Text>
       </View>
 
-      {/* Chat Messages */}
       <FlatList
         data={messages}
         keyExtractor={(item) => item.id}
@@ -73,7 +86,6 @@ export default function ChatScreen() {
         contentContainerStyle={styles.messageContainer}
       />
 
-      {/* Message Input */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
