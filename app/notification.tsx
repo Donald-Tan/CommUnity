@@ -1,42 +1,18 @@
 import React, { useState, useRef } from "react";
 import {
   View,
-  Text,
-  FlatList,
   Image,
   TouchableOpacity,
-  StyleSheet,
   Animated,
   Dimensions,
+  StyleSheet,
 } from "react-native";
 import { useRouter } from "expo-router";
-
-const movementNotifications = [
-  {
-    id: "1",
-    name: "Donald",
-    message: "is interested in connecting",
-    image: require("@/assets/images/nav bar/icons8-test-account-48.png"),
-  },
-];
-
-const allNotifications = [
-  {
-    id: "2",
-    name: "Adam Thomas",
-    message: "sent a message",
-    image: require("@/assets/images/nav bar/icons8-test-account-48.png"),
-  },
-  {
-    id: "1",
-    name: "Donald",
-    message: "is interested in connecting",
-    image: require("@/assets/images/nav bar/icons8-test-account-48.png"),
-  },
-];
+import NotificationList from "@/components/NotificationList";
+import { communityNotifications, connectionNotifications } from "@/data/data";
 
 export default function NotificationScreen() {
-  const [activeTab, setActiveTab] = useState("movement");
+  const [activeTab, setActiveTab] = useState("connection");
   const router = useRouter();
   const animation = useRef(new Animated.Value(0)).current;
   const { width } = Dimensions.get("window");
@@ -55,24 +31,11 @@ export default function NotificationScreen() {
   const handleTabPress = (tab) => {
     setActiveTab(tab);
     Animated.timing(animation, {
-      toValue: tab === "movement" ? 0 : width / 2,
+      toValue: tab === "connection" ? 0 : width / 2,
       duration: 300,
       useNativeDriver: true,
     }).start();
   };
-
-  const renderNotificationItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.notificationItem}
-      onPress={() => openChat(item)}
-    >
-      <Image source={item.image} style={styles.profileImage} />
-      <View>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.message}>{item.message}</Text>
-      </View>
-    </TouchableOpacity>
-  );
 
   return (
     <View style={styles.container}>
@@ -80,20 +43,28 @@ export default function NotificationScreen() {
       <View style={styles.tabContainer}>
         <TouchableOpacity
           style={styles.tabIconContainer}
-          onPress={() => handleTabPress("movement")}
+          onPress={() => handleTabPress("connection")}
         >
           <Image
-            source={require("@/assets/images/nav bar/icons8-handshake-50.png")}
-            style={styles.tabIcon}
+            source={
+              activeTab === "connection"
+                ? require("@/assets/images/nav bar/icons8-handshake-50.png")
+                : require("@/assets/images/nav bar/icons8-handshake-50-2.png")
+            }
+            style={{ width: 28, height: 28 }}
           />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.tabIconContainer}
-          onPress={() => handleTabPress("all")}
+          onPress={() => handleTabPress("community")}
         >
           <Image
-            source={require("@/assets/images/nav bar/icons8-walk-50.png")}
-            style={styles.tabIcon}
+            source={
+              activeTab === "community"
+                ? require("@/assets/images/nav bar/icons8-crowd-48-2.png")
+                : require("@/assets/images/nav bar/icons8-crowd-48.png")
+            }
+            style={{ width: 28, height: 28 }}
           />
         </TouchableOpacity>
         <Animated.View
@@ -102,13 +73,13 @@ export default function NotificationScreen() {
       </View>
 
       {/* Notification List */}
-      <FlatList
+      <NotificationList
         data={
-          activeTab === "movement" ? movementNotifications : allNotifications
+          activeTab === "connection"
+            ? connectionNotifications
+            : communityNotifications
         }
-        keyExtractor={(item) => item.id}
-        renderItem={renderNotificationItem}
-        style={styles.notificationList}
+        onPress={openChat}
       />
     </View>
   );
@@ -144,31 +115,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: "50%",
-  },
-  notificationList: {
-    flex: 1,
-  },
-  notificationItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: "#3A6B73",
-  },
-  profileImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
-  },
-  message: {
-    fontSize: 14,
-    color: "lightgray",
   },
 });
