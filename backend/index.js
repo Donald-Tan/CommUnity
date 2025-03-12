@@ -1,7 +1,12 @@
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*", // Allow all origins (for testing only)
+    methods: ["GET", "POST"],
+  },
+});
 
 app.use(express.static("public"));
 
@@ -16,10 +21,9 @@ io.on("connection", (socket) => {
   // Handle new message from client
   socket.on("newMessage", (message) => {
     messages.push(message);
-    io.emit("newMessage", message);
+    io.emit("newMessage", message); // Broadcast to all clients
   });
 
-  // Handle client disconnection
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });

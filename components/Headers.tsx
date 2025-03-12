@@ -8,7 +8,7 @@ const Header = () => {
 
   const handleBellPress = () => {
     setNotificationCount(0);
-    router.push("/notification"); // Navigate to the Notification screen
+    router.push("../notification"); // Navigate to the Notification screen
   };
 
   return (

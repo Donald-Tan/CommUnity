@@ -22,7 +22,7 @@ export default function ConnectionsScreen() {
 
   const openChat = (connection) => {
     router.push({
-      pathname: "/chat",
+      pathname: "../chat",
       params: {
         id: connection.id,
         name: connection.name,

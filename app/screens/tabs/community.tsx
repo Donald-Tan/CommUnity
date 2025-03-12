@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import Header from "../../components/Headers";
+import Header from "../../../components/Headers";
 import { fakeGroups } from "@/data/data";
 import GroupList from "@/components/GroupList";
 

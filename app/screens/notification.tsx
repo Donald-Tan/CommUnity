@@ -19,7 +19,7 @@ export default function NotificationScreen() {
 
   const openChat = (notification) => {
     router.push({
-      pathname: "/chat",
+      pathname: "./chat",
       params: {
         id: notification.id,
         name: notification.name,
@@ -46,12 +46,12 @@ export default function NotificationScreen() {
           onPress={() => handleTabPress("connection")}
         >
           <Image
+            style={styles.tabIcon}
             source={
               activeTab === "connection"
                 ? require("@/assets/images/nav bar/icons8-handshake-50.png")
                 : require("@/assets/images/nav bar/icons8-handshake-50-2.png")
             }
-            style={{ width: 28, height: 28 }}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -59,12 +59,12 @@ export default function NotificationScreen() {
           onPress={() => handleTabPress("community")}
         >
           <Image
+            style={styles.tabIcon}
             source={
               activeTab === "community"
                 ? require("@/assets/images/nav bar/icons8-crowd-48-2.png")
                 : require("@/assets/images/nav bar/icons8-crowd-48.png")
             }
-            style={{ width: 28, height: 28 }}
           />
         </TouchableOpacity>
         <Animated.View
@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
     width: "50%",
   },
   tabIcon: {
-    width: 24,
-    height: 24,
+    width: 28,
+    height: 28,
     tintColor: "white",
   },
   slider: {
