@@ -1,32 +1,28 @@
-import React, {useState, useEffect} from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
-import {fakeGroups} from '@/data/data';
+import { fakeGroups } from "@/data/data";
 import GroupList from "@/components/GroupList";
-//import MovementList from "@/components/MovementList";
-import { SearchBar } from "react-native-screens";
-import {useRouter} from 'expo-router'
+import { useRouter } from "expo-router";
 
+export default function Movement() {
+  const [searchQuery, setSearchQuery] = useState("");
 
-export default function EditCommunityPage() {
-  const [searchQuery, setSearchQuery] = useState('');
- 
-  const filteredGroups = fakeGroups.filter(group => 
+  const filteredGroups = fakeGroups.filter((group) =>
     group.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  );
 
-  
   return (
     <View style={styles.container}>
       <ScrollView style={styles.content}>
-        <TextInput 
-          style={styles.searchBar} 
+        <TextInput
+          style={styles.searchBar}
           placeholder="Find Group"
           onChangeText={setSearchQuery}
-          value = {searchQuery}
-          />
+          value={searchQuery}
+        />
 
         <Text style={styles.sectionLabel}>Groups</Text>
-        <GroupList  groups={filteredGroups} showJoin={false}/>
+        <GroupList groups={filteredGroups} showJoin={true} />
       </ScrollView>
     </View>
   );
@@ -40,11 +36,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
-  },
   content: {
     flexGrow: 1,
     width: "100%",
@@ -55,18 +46,18 @@ const styles = StyleSheet.create({
     color: "white",
     marginTop: 15,
     marginBottom: 5,
-    alignSelf: "flex-start", // Aligns text to the left
+    alignSelf: "flex-start",
     marginLeft: 10,
   },
   searchBar: {
-    width: '100%',
+    width: "100%",
     height: 50,
     paddingHorizontal: 16,
     paddingVertical: 6,
-    borderColor: 'transparent',
+    borderColor: "transparent",
     borderWidth: 2,
     borderRadius: 20,
-    backgroundColor: '#f3f3f4',
-    color: '#0d0c22',
-  }
+    backgroundColor: "#f3f3f4",
+    color: "#0d0c22",
+  },
 });
