@@ -42,6 +42,18 @@ const GroupPage = () => {
           </Text>
         </View>
 
+        {/* Announcements Section */}
+        {group.announcements && (
+          <View style={styles.announcementContainer}>
+            <Text style={styles.announcementTitle}>Announcements</Text>
+            {group.announcements.map((announcement, index) => (
+              <Text key={index} style={styles.announcementText}>
+                • {announcement}
+              </Text>
+            ))}
+          </View>
+        )}
+
         <TouchableOpacity style={styles.joinButton} onPress={handleJoin}>
           <Text style={styles.joinButtonText}>Join Group</Text>
         </TouchableOpacity>
@@ -67,7 +79,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
-    marginBottom: 20, // Added spacing to improve layout
+    marginBottom: 20,
   },
   groupName: {
     fontSize: 24,
@@ -89,6 +101,23 @@ const styles = StyleSheet.create({
   establishedDate: {
     fontSize: 14,
     color: "gray",
+  },
+  announcementContainer: {
+    backgroundColor: "#4F7F7F",
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 15,
+    width: "100%",
+  },
+  announcementTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 5,
+  },
+  announcementText: {
+    fontSize: 14,
+    color: "#d1d1d1",
   },
   joinButton: {
     backgroundColor: "black",

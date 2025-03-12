@@ -1,52 +1,58 @@
 // Hardcoded data for clubs/movements
 export const fakeGroups = [
   {
-    image: require("../assets/images/runclub.png"),
     id: "1",
+    image: require("../assets/images/runclub.png"),
     name: "UW Running Club",
     members: 20,
-    announcements: ["5k Run tomorrow @ 12:30PM"],
-    description: "Descripton for Running Club",
+    announcements: ["🏃 5k Run tomorrow @ 12:30 PM!"],
+    description:
+      "Join us for weekly runs and improve your stamina while meeting new friends!",
   },
   {
-    image: require("../assets/images/soccerball.png"),
     id: "2",
+    image: require("../assets/images/soccerball.png"),
     name: "UWB Soccer Club",
     members: 96,
-    announcements: [],
-    description: "Description for Soccer Club",
+    announcements: ["⚽ Friendly match this Saturday @ 3 PM!"],
+    description:
+      "Sharpen your soccer skills and enjoy friendly matches with our club!",
   },
   {
-    image: require("../assets/images/csseclub.png"),
     id: "3",
+    image: require("../assets/images/csseclub.png"),
     name: "UWB CSSE Club",
     members: 20,
-    announcements: ["Hackathon at ARC next week!"],
-    description: "Description for CSSE Club",
+    announcements: ["💻 Hackathon at ARC next week!"],
+    description:
+      "Explore coding challenges, AI projects, and software development with fellow tech enthusiasts.",
   },
   {
-    image: require("../assets/images/badminton.png"),
     id: "4",
+    image: require("../assets/images/badminton.png"),
     name: "UWB Badminton Club",
     members: 65,
-    announcements: [],
-    description: "Description for Badminton Club",
+    announcements: ["🏸 Tournament sign-ups now open!"],
+    description:
+      "Join our club to improve your badminton skills and compete in fun tournaments.",
   },
   {
     id: "5",
     image: require("../assets/images/no-smoking.png"),
     name: "No Smoking Movement",
-    description: "Description about no smoking",
     members: 101,
-    progress: 0.5,
+    announcements: ["🚭 Awareness campaign this Friday!"],
+    description:
+      "Support our mission to create a healthier campus by raising awareness about the dangers of smoking.",
   },
   {
     id: "6",
     image: require("../assets/images/daily-run.png"),
     name: "Daily Running Movement",
-    description: "Description about running daily",
     members: 24,
-    progress: 0.8,
+    announcements: ["🏃‍♂️ Morning run challenge starting Monday!"],
+    description:
+      "Join our movement to build healthy habits with daily morning runs.",
   },
 ];
 

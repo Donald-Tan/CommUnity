@@ -8,7 +8,11 @@ export default function EditCommunityPage() {
   const renderGroupList = () => (
     <>
       <Text style={styles.sectionLabel}>Groups</Text>
-      <GroupList groups={fakeGroups} showJoin={false} />
+      <GroupList
+        groups={fakeGroups}
+        showAnnouncements={true}
+        showJoin={false}
+      />
     </>
   );
 
