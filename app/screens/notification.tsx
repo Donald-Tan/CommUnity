@@ -39,6 +39,14 @@ export default function NotificationScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Back Button */}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+        <Image
+          source={require("@/assets/Icons/BackArrow.png")}
+          style={styles.backIcon}
+        />
+      </TouchableOpacity>
+
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
         <TouchableOpacity
@@ -91,12 +99,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#2C5D63",
     padding: 10,
   },
+  backButton: {
+    position: "absolute",
+    top: 40,
+    left: 15,
+    zIndex: 10,
+  },
+  backIcon: {
+    width: 30,
+    height: 30,
+    tintColor: "white",
+  },
   tabContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 20,
     width: "100%",
     position: "relative",
+    marginTop: 50, // Added margin to avoid overlap with the back button
   },
   tabIconContainer: {
     padding: 10,
