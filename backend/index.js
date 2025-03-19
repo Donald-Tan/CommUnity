@@ -3,7 +3,7 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "*", // Allow all origins (for testing only)
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -21,7 +21,7 @@ io.on("connection", (socket) => {
   // Handle new message from client
   socket.on("newMessage", (message) => {
     messages.push(message);
-    io.emit("newMessage", message); // Broadcast to all clients
+    io.emit("newMessage", message);
   });
 
   socket.on("disconnect", () => {

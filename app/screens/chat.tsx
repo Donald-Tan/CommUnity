@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,41 +9,43 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useNavigation } from "expo-router";
 import { io, Socket } from "socket.io-client";
+import { v4 as uuidv4 } from "uuid"; // Generate unique IDs
+
+interface Message {
+  id: string;
+  text: string;
+  sender: string;
+}
 
 export default function ChatScreen() {
-  interface Message {
-    id: string;
-    text: string;
-    sender: string;
-  }
-
   const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [userId, setUserId] = useState<string>(uuidv4()); // Generate a new ID for every session
+
   const navigation = useNavigation();
   const router = useRouter();
   const socketRef = useRef<Socket | null>(null);
 
-  const { id, name, image } = useLocalSearchParams(); // Connection details
-  const [newMessage, setNewMessage] = useState("");
+  const { id, name, image } = useLocalSearchParams();
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:3000"); // Replace with your IP and port
+    socketRef.current = io("http://localhost:3000"); // Replace with your server URL
 
     navigation.setOptions({ tabBarStyle: { display: "none" } });
 
     socketRef.current.on("connect", () => {
-      console.log("Connected to server");
+      console.log("Connected to server as:", userId);
     });
 
-    socketRef.current?.on("messages", (receivedMessages) => {
+    socketRef.current.on("messages", (receivedMessages: Message[]) => {
       setMessages(receivedMessages);
     });
 
-    socketRef.current?.on("newMessage", (message) => {
+    socketRef.current.on("newMessage", (message: Message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
@@ -51,28 +53,26 @@ export default function ChatScreen() {
       socketRef.current?.disconnect();
       navigation.setOptions({ tabBarStyle: { display: "flex" } });
     };
-  }, [navigation]);
+  }, [navigation, userId]); // Include userId in dependencies
 
-  const sendMessage = () => {
+  const sendMessage = useCallback(() => {
     if (!newMessage.trim()) return;
 
-    const messageData = {
+    const messageData: Message = {
       id: String(Date.now()),
       text: newMessage,
-      sender: "me",
+      sender: userId,
     };
 
-    if (socketRef.current) {
-      socketRef.current.emit("newMessage", messageData); // Send the message to the server
-    }
-    setNewMessage(""); // Clear input
-  };
+    socketRef.current?.emit("newMessage", messageData);
+    setNewMessage("");
+  }, [newMessage, userId]);
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={90} // Adjust based on your header height
+      keyboardVerticalOffset={90}
     >
       {/* Header */}
       <View style={styles.header}>
@@ -82,8 +82,13 @@ export default function ChatScreen() {
         >
           <Text style={styles.backText}>←</Text>
         </TouchableOpacity>
-        <Image source={{ uri: String(image) }} style={styles.profileImage} />
-        <Text style={styles.name}>{name}</Text>
+        <Image
+          source={{
+            uri: image ? String(image) : "https://via.placeholder.com/40",
+          }}
+          style={styles.profileImage}
+        />
+        <Text style={styles.name}>{name || "User"}</Text>
       </View>
 
       {/* Message List */}
@@ -93,14 +98,13 @@ export default function ChatScreen() {
           <View
             style={[
               styles.messageBubble,
-              item.sender === "me" ? styles.myMessage : styles.theirMessage,
+              item.sender === userId ? styles.myMessage : styles.theirMessage,
             ]}
           >
             <Text style={styles.messageText}>{item.text}</Text>
           </View>
         )}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.messageList}
       />
 
       {/* Input Field */}
@@ -108,8 +112,8 @@ export default function ChatScreen() {
         <TextInput
           style={styles.inputField}
           value={newMessage}
-          onChangeText={(text) => setNewMessage(text)}
-          placeholder="Type a message..."
+          onChangeText={setNewMessage}
+          placeholder=""
           placeholderTextColor="#999"
         />
         <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
@@ -150,19 +154,15 @@ const styles = StyleSheet.create({
     color: "white",
     marginLeft: 10,
   },
-  messageList: {
-    padding: 10,
-  },
   messageBubble: {
     padding: 10,
     borderRadius: 15,
-    marginBottom: 10,
+    marginVertical: 5,
     maxWidth: "75%",
   },
   myMessage: {
     backgroundColor: "#2C5D63",
     alignSelf: "flex-end",
-    color: "white",
   },
   theirMessage: {
     backgroundColor: "#ddd",
