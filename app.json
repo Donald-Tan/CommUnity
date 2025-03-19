@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
+    }, 
+    "router": {
+      "root": "./screens.login.tsx", 
+      "routes": [
+        {
+          "name": "login", 
+          "screen": "./screens.login.tsx"
+        }
+      ]
     }
   }
 }

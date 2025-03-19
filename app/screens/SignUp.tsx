@@ -14,7 +14,8 @@ import React from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH, db } from "../../FirebaseConfig";
 import { Link } from "expo-router";
-import { doc, setDoc } from "firebase/firestore"
+import { doc, setDoc } from "firebase/firestore";
+import { useRouter } from "expo-router";
 
 // Get the screen width to adjust the logo size dynamically
 const { width } = Dimensions.get("window");
@@ -26,6 +27,9 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const router = useRouter();
+
 
   const validateFields = () => {
     const errors = [];
@@ -87,7 +91,7 @@ const SignUp = () => {
         });
 
         Alert.alert("Success", "Account Created Successfully!");
-
+        router.push("./login");
       } catch (error: any) {
         if (error.code === "/auth/email-already-in-use") {
           Alert.alert("Error", "Email Already In Use. Please Try Again.");
