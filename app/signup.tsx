@@ -5,27 +5,35 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../FirebaseConfig';
 import { Link } from 'expo-router';
 
-const Login = () => {
+const SignUp = () => {
     const auth = FIREBASE_AUTH;
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const handleLogin = async () => {
-        setLoading(true);
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            Alert.alert('Success', 'Logged in successfully!');
-        } catch (error: any) {
-            Alert.alert('Login failed', 'Please try again');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const handleSignIn = async () => {
+            setLoading(true);
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                Alert.alert('Success', 'Logged in successfully!');
+            } catch (error: any) {
+                Alert.alert('Login failed', 'Please try again');
+            } finally {
+                setLoading(false);
+            }
+        };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Log In</Text>
+            <Text style={styles.header}>Sign Up</Text>
+            <TextInput 
+                value={name} 
+                style={styles.input} 
+                placeholder="Full Name" 
+                onChangeText={(text) => setName(text)}
+                placeholderTextColor="#aaa"
+            />
             <TextInput 
                 value={email} 
                 style={styles.input} 
@@ -46,13 +54,13 @@ const Login = () => {
             {loading ? (
                 <ActivityIndicator size="large" color="#fff" />
             ) : (
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Log In</Text>
+                <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+                    <Text style={styles.buttonText}>Sign Up</Text>
                 </TouchableOpacity>
             )}
 
-            <Link href="/signup" style={styles.registerButton}>
-                <Text style={styles.registerText}>Don't have an account? Sign up</Text>
+            <Link href="/login" style={styles.loginButton}>
+                <Text style={styles.loginText}>Already have an account? Log in</Text>
             </Link>
         </View>
     );
@@ -92,16 +100,15 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
     },
-    registerButton: {
+    loginButton: {
         marginTop: 20,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    registerText: {
+    loginText: {
         color: '#bbb',
         fontSize: 14,
         textAlign: 'center',
     },
-});
-
-export default Login;
+})
+export default SignUp;
