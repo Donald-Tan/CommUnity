@@ -1,29 +1,30 @@
-import React from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import Header from "../../../components/Headers";
+import React, { useRef } from "react";
+import { View, Animated, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Header from "@/components/Headers";
 import { fakeGroups } from "@/data/data";
 import GroupList from "@/components/GroupList";
 
 export default function EditCommunityPage() {
-  const renderGroupList = () => (
-    <>
-      <Text style={styles.sectionLabel}>Groups</Text>
-      <GroupList
-        groups={fakeGroups}
-        showAnnouncements={true}
-        showJoin={false}
-      />
-    </>
-  );
+  const insets = useSafeAreaInsets();
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   return (
     <View style={styles.container}>
-      <Header />
-      <FlatList
-        data={[{ key: "groups" }]}
-        renderItem={renderGroupList}
-        keyExtractor={(item) => item.key}
-        contentContainerStyle={styles.flatListContainer}
+      <Header scrollY={scrollY} />
+      <Animated.FlatList
+        data={fakeGroups}
+        renderItem={({ item }) => <GroupList groups={[item]} />}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{
+          paddingTop: 60, // Space for the header
+          paddingBottom: insets.bottom + 70, // Prevent tab bar overlap
+        }}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true }
+        )}
+        scrollEventThrottle={16}
       />
     </View>
   );
@@ -33,18 +34,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#2C5D63",
-    padding: 10,
-  },
-  sectionLabel: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "white",
-    marginTop: 15,
-    marginBottom: 5,
-    alignSelf: "flex-start",
-    marginLeft: 10,
-  },
-  flatListContainer: {
-    paddingTop: 20,
+    paddingHorizontal: 10,
   },
 });

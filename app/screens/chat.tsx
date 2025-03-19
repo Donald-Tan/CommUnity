@@ -53,7 +53,7 @@ export default function ChatScreen() {
       socketRef.current?.disconnect();
       navigation.setOptions({ tabBarStyle: { display: "flex" } });
     };
-  }, [navigation, userId]); // Include userId in dependencies
+  }, [navigation, userId]);
 
   const sendMessage = useCallback(() => {
     if (!newMessage.trim()) return;
@@ -64,10 +64,10 @@ export default function ChatScreen() {
       sender: userId,
     };
 
-    socketRef.current?.emit("newMessage", messageData);
+    socketRef.current?.emit("newMessage", messageData); // Only send, don't update state
+
     setNewMessage("");
   }, [newMessage, userId]);
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -113,7 +113,7 @@ export default function ChatScreen() {
           style={styles.inputField}
           value={newMessage}
           onChangeText={setNewMessage}
-          placeholder=""
+          placeholder="Type a message..."
           placeholderTextColor="#999"
         />
         <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
