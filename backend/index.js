@@ -13,14 +13,15 @@ app.use(express.static("public"));
 let messages = [];
 
 io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
+  console.log("A user connected:", socket.id);
 
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg); // Send message to all clients
+  socket.on("newMessage", (message) => {
+    console.log("New message received:", message);
+    io.emit("newMessage", message); // Broadcast to all clients
   });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
+    console.log("A user disconnected:", socket.id);
   });
 });
 

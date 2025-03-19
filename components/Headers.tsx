@@ -1,64 +1,75 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
-  Text,
-  StyleSheet,
   Image,
   TouchableOpacity,
+  Text,
+  Animated,
+  StyleSheet,
   Dimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
 
-// Get the screen width to adjust the logo size dynamically
 const { width } = Dimensions.get("window");
 
-const Header = () => {
+const HEADER_HEIGHT = 60; // Adjusted for compact size
+
+const Header = ({ scrollY }: { scrollY: Animated.Value }) => {
   const router = useRouter();
-  const [notificationCount, setNotificationCount] = useState(3);
+
+  const translateY = scrollY.interpolate({
+    inputRange: [0, HEADER_HEIGHT],
+    outputRange: [0, -HEADER_HEIGHT],
+    extrapolate: "clamp",
+  });
 
   const handleBellPress = () => {
-    setNotificationCount(0);
-    router.push("../notification"); // Navigate to the Notification screen
+    router.push("../notification");
   };
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { transform: [{ translateY }] }]}>
+      <Image
+        source={require("@/assets/Icons/justCommunityLogo.png")}
+        style={styles.logo}
+      />
+      {/* Notification Bell */}
       <TouchableOpacity
         onPress={handleBellPress}
         style={styles.notificationContainer}
       >
         <Image
-          id="header"
           source={require("@/assets/Icons/notificationBell.png")}
           style={styles.notificationBell}
         />
-        {notificationCount > 0 && (
-          <View style={styles.notificationBadge}>
-            <Text style={styles.notificationText}>{notificationCount}</Text>
-          </View>
-        )}
+        <View style={styles.notificationBadge}>
+          <Text style={styles.notificationText}>3</Text>
+        </View>
       </TouchableOpacity>
 
-      <Image
-        source={require("@/assets/Icons/CommUnityLogo.png")}
-        style={[styles.logo, { width: width * 0.4, height: width * 0.2 }]} // Make the logo responsive
-      />
-    </View>
+      {/* Responsive Logo */}
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "flex-start",
+    height: HEADER_HEIGHT,
+    width: "100%",
+    flexDirection: "row",
     alignItems: "center",
-    paddingTop: 40, // Increased paddingTop for space between logo and bell
-    position: "relative",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    backgroundColor: "#2C5D63",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000, // Ensures it overlays content
   },
   notificationContainer: {
-    position: "absolute",
-    top: 20, // Position bell at the top right
-    right: 20,
+    position: "relative",
+    padding: 5,
   },
   notificationBell: {
     width: 30,
@@ -66,26 +77,24 @@ const styles = StyleSheet.create({
   },
   notificationBadge: {
     position: "absolute",
-    top: -5,
-    right: -5,
+    top: -2,
+    right: -2,
     backgroundColor: "red",
     borderRadius: 10,
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
     justifyContent: "center",
     alignItems: "center",
   },
   notificationText: {
     color: "white",
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: "bold",
   },
   logo: {
-    position: "absolute",
-    top: 0,
-    left: 10,
+    height: 40, // Keeps logo proportional
+    width: width * 0.3, // Adjust width based on height to prevent overlapping
     resizeMode: "contain",
-    marginBottom: 10,
   },
 });
 
