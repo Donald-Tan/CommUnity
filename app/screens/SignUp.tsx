@@ -18,13 +18,14 @@ import { Link } from "expo-router";
 // Get the screen width to adjust the logo size dynamically
 const { width } = Dimensions.get("window");
 
-const Login = () => {
+const SignUp = () => {
   const auth = FIREBASE_AUTH;
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleSignIn = async () => {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -44,7 +45,14 @@ const Login = () => {
           style={[styles.logo, { width: width * 0.8, height: width * 0.2 }]} // Responsive logo size
         />
       </View>
-      <Text style={styles.header}>Log In</Text>
+      <Text style={styles.header}>Sign Up</Text>
+      <TextInput
+        value={name}
+        style={styles.input}
+        placeholder="Full Name"
+        onChangeText={(text) => setName(text)}
+        placeholderTextColor="#aaa"
+      />
       <TextInput
         value={email}
         style={styles.input}
@@ -52,7 +60,6 @@ const Login = () => {
         autoCapitalize="none"
         onChangeText={(text) => setEmail(text)}
         placeholderTextColor="#aaa"
-        textContentType="emailAddress"
       />
       <TextInput
         secureTextEntry={true}
@@ -62,18 +69,17 @@ const Login = () => {
         autoCapitalize="none"
         onChangeText={(text) => setPassword(text)}
         placeholderTextColor="#aaa"
-        textContentType="password"
       />
       {loading ? (
         <ActivityIndicator size="large" color="#fff" />
       ) : (
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Log In</Text>
+        <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
       )}
 
-      <Link href="./SignUp" style={styles.registerButton}>
-        <Text style={styles.registerText}>Don't have an account? Sign up</Text>
+      <Link href="./login" style={styles.loginButton}>
+        <Text style={styles.loginText}>Already have an account? Log in</Text>
       </Link>
     </View>
   );
@@ -122,16 +128,16 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
-  registerButton: {
+  loginButton: {
     marginTop: 20,
     alignItems: "center",
     justifyContent: "center",
   },
-  registerText: {
+  loginText: {
     color: "#bbb",
     fontSize: 14,
     textAlign: "center",
   },
 });
 
-export default Login;
+export default SignUp;

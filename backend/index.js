@@ -1,19 +1,16 @@
 const express = require("express");
 const app = express();
-const http = require("http");
-const cors = require("cors");
-const { Server } = require("socket.io");
-
-// Middleware
-app.use(cors()); // Allows frontend to connect
-
-const server = http.createServer(app);
-const io = new Server(server, {
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:19006", // Expo's default dev server
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
+
+app.use(express.static("public"));
+
+let messages = [];
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
