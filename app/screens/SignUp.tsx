@@ -11,15 +11,23 @@ import {
 } from "react-native";
 import { useState } from "react";
 import React from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import { createUserWithEmailAndPassword} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { FIREBASE_AUTH, db } from "../../FirebaseConfig";
 import { Link } from "expo-router";
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from "./types"; // Import the types
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 
 // Get the screen width to adjust the logo size dynamically
 const { width } = Dimensions.get("window");
 
+type SignUpNavigationProp = NativeStackNavigationProp<RootStackParamList, "SignUp">;
+
 const SignUp = () => {
   const auth = FIREBASE_AUTH;
+  const nav = useNavigation<SignUpNavigationProp>();;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,10 +36,20 @@ const SignUp = () => {
   const handleSignIn = async () => {
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert("Success", "Logged in successfully!");
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      //Store user in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name: name,
+        email: email,
+        createdAt: new Date(),
+        profilePicUrl: null, //update
+      });
+
+      nav.navigate("CreateAccount", { userId: user.uid });
     } catch (error: any) {
-      Alert.alert("Login failed", "Please try again");
+      Alert.alert("Sign up failed", "Please try again");
     } finally {
       setLoading(false);
     }
