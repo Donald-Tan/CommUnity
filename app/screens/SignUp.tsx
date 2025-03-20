@@ -32,42 +32,8 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-
-  const validateFields = () => {
-    const errors = [];
-
-    if (!name.trim()) {
-      console.log("Name is empty");
-      // @ts-ignore
-      errors.push("Please Enter Your Name");
-    }
-
-    if (!email.trim() || !/\w+@\w+.com/i.test(email)) {
-      console.log("Email is empty");
-      // @ts-ignore
-      errors.push("Please Enter a Valid Email Address");
-    }
-
-    if (!password.trim() || !/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/.test(password)) {
-      console.log("Password is empty");
-      // @ts-ignore
-      errors.push("Please Enter a valid Password");
-    }
-    
-    if (errors.length > 0) {
-      setError(errors.join(", ") as any);
-      return false;
-    }
-
-    setError(null);
-    console.log("Success");
-    return true;
-
-  }
-
-  const handleSignUp = async () => {
+  const handleSignIn = async () => {
     setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -83,8 +49,6 @@ const SignUp = () => {
 
       nav.navigate("CreateAccount", { userId: user.uid });
     } catch (error: any) {
-      Alert.alert("Sign up failed", "Please try again");
-      console.log(error.code, error.message); // Log the error code and message
       Alert.alert("Sign up failed", "Please try again");
     } finally {
       setLoading(false);
@@ -124,13 +88,10 @@ const SignUp = () => {
         onChangeText={(text) => setPassword(text)}
         placeholderTextColor="#aaa"
       />
-      {error ? (
-        <Text style={{ color: "#ff0d2a", fontWeight: "bold" }}>{error}</Text>
-      ) : null}
       {loading ? (
         <ActivityIndicator size="large" color="#fff" />
       ) : (
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <TouchableOpacity style={styles.button} onPress={handleSignIn}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
       )}
