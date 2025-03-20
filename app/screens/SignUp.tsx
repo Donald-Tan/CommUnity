@@ -70,7 +70,12 @@ const SignUp = () => {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert("Success", "Logged in successfully!");
     } catch (error: any) {
+<<<<<<< HEAD
       Alert.alert("Login failed", "Please try again");
+=======
+      console.log(error.code, error.message); // Log the error code and message
+      Alert.alert("Sign up failed", "Please try again");
+>>>>>>> bfd3439 (Finished adding Create Group Function, still having issue with Firebase)
     } finally {
       setLoading(false);
     }

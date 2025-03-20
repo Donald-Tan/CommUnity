@@ -14,6 +14,14 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID
 };
 
+let app;
+
+try {
+  app = initializeApp(firebaseConfig);
+} catch (error) {
+  console.log("Firebase app already initialized");
+}
+
 //Init Firebase Services
 export const FIREBASE_APP = initializeApp(firebaseConfig);
 export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
