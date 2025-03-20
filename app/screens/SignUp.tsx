@@ -11,17 +11,18 @@ import {
 } from "react-native";
 import { useState } from "react";
 import React from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { FIREBASE_AUTH, db } from "../../FirebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import { Link } from "expo-router";
-import { doc, setDoc } from "firebase/firestore";
-import { useRouter } from "expo-router";
 
 // Get the screen width to adjust the logo size dynamically
 const { width } = Dimensions.get("window");
 
+type SignUpNavigationProp = NativeStackNavigationProp<RootStackParamList, "SignUp">;
+
 const SignUp = () => {
   const auth = FIREBASE_AUTH;
+  const nav = useNavigation<SignUpNavigationProp>();;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -66,41 +67,13 @@ const SignUp = () => {
   const handleSignUp = async () => {
     /*setLoading(true);
     try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-      const user = res.user;
+      await signInWithEmailAndPassword(auth, email, password);
       Alert.alert("Success", "Logged in successfully!");
     } catch (error: any) {
       Alert.alert("Login failed", "Please try again");
     } finally {
       setLoading(false);
-    }*/
-    
-      if (!validateFields()) return;
-
-      setLoading(true);
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        // Save user data to the firestore
-        await setDoc(doc(db, "users", user.uid), {
-          uid: userCredential.user.uid,
-          name: name,
-          email: userCredential.user.email, 
-          createdAt: new Date()
-        });
-
-        Alert.alert("Success", "Account Created Successfully!");
-        router.push("./login");
-      } catch (error: any) {
-        if (error.code === "/auth/email-already-in-use") {
-          Alert.alert("Error", "Email Already In Use. Please Try Again.");
-        } else {
-          Alert.alert("Error", "Error Creating Account. Please Try Again.");
-        }
-      } finally {
-        setLoading(false);
-      }
+    }
   };
 
   return (

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator,
 import { useState } from 'react';
 import React from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { FIREBASE_AUTH } from '../FirebaseConfig';
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
 const Login = () => {
     const auth = FIREBASE_AUTH;

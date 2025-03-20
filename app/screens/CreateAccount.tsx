@@ -10,6 +10,8 @@ import {
   Image,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../../FirebaseConfig";
 
 const countries = [
   "USA",
@@ -36,7 +38,9 @@ const graduationYears = Array.from({ length: 20 }, (_, i) =>
   (new Date().getFullYear() + i).toString()
 );
 
-const CreateAccount = () => {
+const CreateAccount = ({ route }: { route: any }) => {
+  const { userId } = route.params;
+
   const [form, setForm] = useState({
     name: "",
     birthday: null as Date | null,
@@ -46,6 +50,7 @@ const CreateAccount = () => {
     graduationYear: null as string | null,
     major: "",
   });
+
   const [showGenderPicker, setShowGenderPicker] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [interests, setInterests] = useState<string[]>([]);
@@ -66,7 +71,7 @@ const CreateAccount = () => {
     setInterests(interests.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       !form.name ||
       !form.birthday ||
@@ -77,7 +82,29 @@ const CreateAccount = () => {
       Alert.alert("Error", "Please fill out all required fields.");
       return;
     }
-    Alert.alert("Success", "Account created successfully!");
+
+    const userData = {
+      name: form.name,
+      birthday: form.birthday,
+      gender: form.gender,
+      ethnicity: form.ethnicity,
+      country: form.country,
+      graduationYear: form.graduationYear,
+      major: form.major,
+      interests: interests,
+    };
+
+    try {
+      //Save to existing account
+      await setDoc(doc(db, "users", userId), userData);
+
+      Alert.alert("Success", "Account details saved successfully!");
+
+      //navigate to other screen
+    } catch (error) {
+      console.error("Error saving data to Firestore: ", error);
+      Alert.alert("Error", "Failed to save data.");
+    }
   };
 
   return (
@@ -185,7 +212,7 @@ const CreateAccount = () => {
       ))}
 
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Create Account</Text>
+        <Text style={styles.buttonText}>Save Details</Text>
       </TouchableOpacity>
     </ScrollView>
   );
