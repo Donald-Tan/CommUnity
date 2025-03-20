@@ -6,6 +6,7 @@ import GroupList from "@/components/GroupList";
 import GroupCreate from "@/components/GroupCreate";
 
 export default function MovementPage() {
+
   const insets = useSafeAreaInsets();
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreatingGroup, setIsCreatingGroup] = useState(false);
